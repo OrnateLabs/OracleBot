@@ -1,0 +1,65 @@
+// backend.js
+const express = require('express');
+const cors = require('cors');
+
+const app = express();
+const port = 5000;
+
+app.use(cors());
+app.use(express.json());
+
+// --- Data Sensing ---
+app.get('/api/sensor', (_req, res) => {
+  const value = Math.round(Math.random() * 100);
+  res.json({ sensorValue: value });
+});
+
+// --- Chat (simple echo) ---
+app.post('/api/chat', (req, res) => {
+  const { message } = req.body;
+  res.json({ reply: `Bot: You said "${message}"` });
+});
+
+// --- Planner (in-memory) ---
+let tasks = [];
+
+app.get('/api/tasks', (_req, res) => {
+  res.json({ tasks });
+});
+
+app.post('/api/tasks', (req, res) => {
+  const { task } = req.body;
+  if (typeof task === "string" && task.trim()) {
+    tasks.push(task);
+    res.json({ success: true, tasks });
+  } else {
+    res.status(400).json({ success: false, error: "Task required" });
+  }
+});
+
+app.delete('/api/tasks/:index', (req, res) => {
+  const idx = parseInt(req.params.index, 10);
+  if (!isNaN(idx) && idx >= 0 && idx < tasks.length) {
+    tasks.splice(idx, 1);
+    res.json({ success: true, tasks });
+  } else {
+    res.status(400).json({ success: false, error: "Invalid index" });
+  }
+});
+
+// --- Bot Panel (stub endpoints) ---
+app.post('/api/bot/start', (_req, res) => {
+  res.json({ status: "Bot started (stub)" });
+});
+app.post('/api/bot/stop', (_req, res) => {
+  res.json({ status: "Bot stopped (stub)" });
+});
+
+// --- Data Viewer (demo endpoint) ---
+app.get('/api/demo-data', (_req, res) => {
+  res.json({ foo: "bar", time: new Date().toISOString() });
+});
+
+app.listen(port, () => {
+  console.log(`Backend listening at http://localhost:${port}`);
+});
