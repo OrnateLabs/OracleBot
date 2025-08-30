@@ -1,0 +1,86 @@
+{
+  "dictionary": [
+    {
+      "word": "hello",
+      "emotion": "friendly"
+    },
+    {
+      "word": "sorry",
+      "emotion": "apologetic"
+    },
+    {
+      "word": "congrats",
+      "emotion": "happy"
+    },
+    {
+      "word": "sad",
+      "emotion": "sad"
+    },
+    {
+      "word": "urgent",
+      "emotion": "alert"
+    },
+    {
+      "word": "please",
+      "emotion": "polite"
+    },
+    {
+      "word": "thank you",
+      "emotion": "grateful"
+    },
+    {
+      "word": "noted",
+      "emotion": "acknowledging"
+    },
+    {
+      "word": "reminder",
+      "emotion": "prompting"
+    },
+    {
+      "word": "meeting",
+      "emotion": "neutral"
+    },
+    {
+      "word": "deadline",
+      "emotion": "cautious"
+    },
+    {
+      "word": "assist",
+      "emotion": "helpful"
+    },
+    {
+      "word": "unavailable",
+      "emotion": "regretful"
+    },
+    {
+      "word": "confirm",
+      "emotion": "affirmative"
+    },
+    {
+      "word": "schedule",
+      "emotion": "organized"
+    },
+    {
+      "word": "follow up",
+      "emotion": "diligent"
+    },
+    {
+      "word": "apology",
+      "emotion": "apologetic"
+    },
+    {
+      "word": "welcome",
+      "emotion": "friendly"
+    },
+    {
+      "word": "immediately",
+      "emotion": "urgent"
+    },
+    {
+      "word": "feedback",
+      "emotion": "receptive"
+    }
+    // You can keep adding more as needed!
+  ]
+}
+
