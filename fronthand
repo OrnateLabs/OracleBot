@@ -1,0 +1,184 @@
+import React, { useState, useEffect } from "react";
+
+// THEME CONFIG – customize as needed
+const theme = {
+  primaryColor: "#2727a1",
+  secondaryColor: "#e3e3e3",
+  fontFamily: "Arial, sans-serif",
+};
+
+// --- DATA SENSING ---
+const DataSensing = () => {
+  const [sensorValue, setSensorValue] = useState<number | null>(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSensorValue(Math.round(Math.random() * 100));
+    }, 1500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <section style={sectionStyle}>
+      <h2>Data Sensing</h2>
+      <div>
+        <b>Sensor Reading:</b> {sensorValue !== null ? `${sensorValue}` : "Loading..."}
+      </div>
+    </section>
+  );
+};
+
+// --- CHAT SECTION ---
+const ChatSection = () => {
+  const [messages, setMessages] = useState<{ sender: string; text: string }[]>([]);
+  const [input, setInput] = useState("");
+
+  const sendMessage = () => {
+    if (input.trim()) {
+      setMessages([...messages, { sender: "You", text: input }]);
+      setInput("");
+      setTimeout(() => {
+        setMessages((msgs) => [...msgs, { sender: "Bot", text: "Response coming soon..." }]);
+      }, 800);
+    }
+  };
+
+  return (
+    <section style={sectionStyle}>
+      <h2>Chat</h2>
+      <div style={{ border: "1px solid #ccc", borderRadius: 6, padding: 8, height: 180, overflowY: "auto", background: "#fff" }}>
+        {messages.map((m, i) => (
+          <div key={i}><b>{m.sender}:</b> {m.text}</div>
+        ))}
+      </div>
+      <input
+        value={input}
+        onChange={e => setInput(e.target.value)}
+        style={{ width: "75%", marginRight: 8 }}
+        placeholder="Type your message..."
+        onKeyDown={e => e.key === "Enter" ? sendMessage() : undefined}
+      />
+      <button onClick={sendMessage}>Send</button>
+    </section>
+  );
+};
+
+// --- PLANNER SECTION ---
+const Planner = () => {
+  const [tasks, setTasks] = useState<string[]>([]);
+  const [task, setTask] = useState("");
+
+  const addTask = () => {
+    if (task.trim()) {
+      setTasks([...tasks, task]);
+      setTask("");
+    }
+  };
+
+  const removeTask = (index: number) => {
+    setTasks(tasks.filter((_, i) => i !== index));
+  };
+
+  return (
+    <section style={sectionStyle}>
+      <h2>Planner</h2>
+      <div>
+        <input
+          value={task}
+          onChange={e => setTask(e.target.value)}
+          placeholder="Add new task"
+          style={{ marginRight: 8 }}
+          onKeyDown={e => e.key === "Enter" ? addTask() : undefined}
+        />
+        <button onClick={addTask}>Add</button>
+      </div>
+      <ul>
+        {tasks.map((t, i) => (
+          <li key={i}>
+            {t} <button onClick={() => removeTask(i)}>Done</button>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+};
+
+// --- BOT PANEL ---
+const BotPanel = () => (
+  <section style={sectionStyle}>
+    <h2>Bot Control</h2>
+    <div>
+      <button disabled>Start Bot</button>
+      <button disabled>Stop Bot</button>
+      <p>Bot commands coming soon! (Connect to your backend here.)</p>
+    </div>
+  </section>
+);
+
+// --- DATA VIEWER (API fetch example) ---
+const DataViewer = ({ endpoint }: { endpoint: string }) => {
+  const [data, setData] = useState<any>(null);
+
+  useEffect(() => {
+    fetch(endpoint)
+      .then((res) => res.json())
+      .then(setData)
+      .catch(console.error);
+  }, [endpoint]);
+
+  if (!data) return (
+    <section style={sectionStyle}>
+      <h2>Data Viewer</h2>
+      <div>Loading...</div>
+    </section>
+  );
+
+  return (
+    <section style={sectionStyle}>
+      <h2>Data Viewer</h2>
+      <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+        {JSON.stringify(data, null, 2)}
+      </pre>
+    </section>
+  );
+};
+
+// --- CUSTOM WIDGET SLOT ---
+const CustomWidget = () => (
+  <section style={sectionStyle}>
+    <h2>Custom Widget</h2>
+    <p>Edit the <b>CustomWidget</b> component for your own UI logic or HTML/JS snippets.</p>
+  </section>
+);
+
+// --- SECTION STYLE ---
+const sectionStyle: React.CSSProperties = {
+  background: "#fff",
+  borderRadius: 8,
+  boxShadow: "0 2px 8px #0001",
+  margin: "24px 0",
+  padding: 20,
+};
+
+// --- MAIN APP ---
+const Fronthand = () => (
+  <div style={{
+    fontFamily: theme.fontFamily,
+    background: theme.secondaryColor,
+    minHeight: "100vh",
+    padding: 16,
+    maxWidth: 700,
+    margin: "0 auto"
+  }}>
+    <h1 style={{ color: theme.primaryColor, fontSize: "2.4em", marginBottom: 0 }}>OracleBot Fronthand</h1>
+    <div style={{ color: "#333", marginBottom: 32 }}>Customizable frontend – data, chat, planner, and bot controls.</div>
+    <DataSensing />
+    <ChatSection />
+    <Planner />
+    <BotPanel />
+    <CustomWidget />
+    <DataViewer endpoint="https://jsonplaceholder.typicode.com/todos/1" />
+  </div>
+);
+
+export default Fronthand;
